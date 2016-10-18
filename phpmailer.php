@@ -1,25 +1,32 @@
 <?php
 require 'vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
+require 'password.php';
 $mail = new PHPMailer;
 
-$mail->isSMTP();                                            //Set mailer to use SMTP
-$mail->Host = 'smtp.gmail.com';                             //Specify main and backup SMTP servers
-$mail->SMTPAuth = true;                                     //Enable SMTP authentication
-$mail->Username = 'dzubiaurreoc15dw@ikzubirimanteo.com';    //SMTP username
-$mail->Password = 'HERNANI93';                              //SMTP password
-$mail->SMTPSecure = 'ssl';                                  //Enable LS encryption. 'ssl' also accepted
-$mail->Port = 465;                                          //TCP port to connect to
+//Enable SMTP debugging. 
+$mail->SMTPDebug = 3;   
+//Set mailer to use SMTP
+$mail->isSMTP();                                            
+//Specify main and backup SMTP servers
+$mail->Host = 'smtp.gmail.com';                             
+//Enable SMTP authentication
+$mail->SMTPAuth = true;                                     
+ //SMTP username
+$mail->Username = 'dzubiaurreoc15dw@ikzubirimanteo.com';   
+//SMTP password
+$mail->Password = $pass;                                    
+ //Enable LS encryption. 'ssl' also accepted
+$mail->SMTPSecure = 'tls';                                 
+//TCP port to connect to
+$mail->Port = 587;                                          
 
-$mail->setFrom('dzubiaurreoc15dw@ikzubirimanteo.com', 'Mailer');
-$mail->addAddress('frogafroga6@gmail.com', 'prueba prueba');           //Add a recipient //frogafroga6@gmail.com password -->pruebaphp
-//$mail->addAddress('ellen@example.com');                   //Name is optional
-//$mail->addReplyTo('info@example.com', 'Information');
-//$mail->addCC('cc@example.com');
-//$mail->addBCC('bbc@example.com');
+$mail->From = 'dzubiaurreoc15dw@ikzubirimanteo.com';
+$mail->FromName= 'David';
+//Add a recipient //frogafroga6@gmail.com password -->pruebaphp
+$mail->addAddress('frogafroga6@gmail.com', 'prueba prueba');    
 
-//$mail->addAttachment('/var/tmp/file.tar.gz');               //Add attachments
-//$mail->AddAttachment('/tmp/image.jpg','new.jpg');         //Optional name
-$mail->isHTML(true);                                        //Set email format to HTML
+$mail->isHTML(true);
+
 $mail->Subject = 'Prueba PHPMailer';
 $mail->Body    = 'Esta es una prueba <b>inbold!</b>';
 $mail->AltBody = 'This is the body in plain text for non-HTL mail clients';
