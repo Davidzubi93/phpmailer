@@ -21,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 session_start();
 //If this automatic URL doesn't work, set it yourself manually
 // $redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-$redirectUri = 'https://php-examples-zmwebdev.c9users.io/07-mail/PHPMailer/OAUTH2/get_oauth2_token.php';
+$redirectUri = 'https://phpmailer-davidzubi93.c9users.io/OAUTH2/get_oauth2_token.php';
 //These details obtained are by setting up app in Google developer console.
 $clientId = '1022282339827-831purqttbkbb94unh9k1gb3rm9dgnnv.apps.googleusercontent.com';
 $clientSecret = '4LzJhvsYPJeQoh3tKwcscghc';
