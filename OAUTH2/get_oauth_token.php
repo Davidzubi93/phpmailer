@@ -12,56 +12,72 @@
  * This script requires PHP 5.4 or later
  * PHP Version 5.4
  */
+
 namespace League\OAuth2\Client\Provider;
+
 require 'vendor/autoload.php';
+
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
+
 session_start();
+
 //If this automatic URL doesn't work, set it yourself manually
-// $redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-$redirectUri = 'https://phpmailer-davidzubi93.c9users.io/OAUTH2/get_oauth2_token.php';
+$redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+//$redirectUri = 'http://localhost/phpmailer/get_oauth_token.php';
+
 //These details obtained are by setting up app in Google developer console.
-$clientId = '1022282339827-831purqttbkbb94unh9k1gb3rm9dgnnv.apps.googleusercontent.com';
-$clientSecret = '4LzJhvsYPJeQoh3tKwcscghc';
+$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
+$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
+
 class Google extends AbstractProvider
 {
     use BearerAuthorizationTrait;
+
     const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'id';
+
     /**
      * @var string If set, this will be sent to google as the "access_type" parameter.
      * @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
      */
     protected $accessType;
+
     /**
      * @var string If set, this will be sent to google as the "hd" parameter.
      * @link https://developers.google.com/accounts/docs/OAuth2Login#hd-param
      */
     protected $hostedDomain;
+
     /**
      * @var string If set, this will be sent to google as the "scope" parameter.
      * @link https://developers.google.com/gmail/api/auth/scopes
      */
     protected $scope;
+
     public function getBaseAuthorizationUrl()
     {
         return 'https://accounts.google.com/o/oauth2/auth';
     }
+
     public function getBaseAccessTokenUrl(array $params)
     {
         return 'https://accounts.google.com/o/oauth2/token';
     }
+
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
 	return ' ';
     }
+
     protected function getAuthorizationParameters(array $options)
     {
 	if (is_array($this->scope)) {
             $separator = $this->getScopeSeparator();
             $this->scope = implode($separator, $this->scope);
         }
+
         $params = array_merge(
             parent::getAuthorizationParameters($options),
             array_filter([
@@ -74,6 +90,7 @@ class Google extends AbstractProvider
         );
         return $params;
     }
+
     protected function getDefaultScopes()
     {
         return [
@@ -82,27 +99,34 @@ class Google extends AbstractProvider
             'profile',
         ];
     }
+
     protected function getScopeSeparator()
     {
         return ' ';
     }
+
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if (!empty($data['error'])) {
             $code  = 0;
             $error = $data['error'];
+
             if (is_array($error)) {
                 $code  = $error['code'];
                 $error = $error['message'];
             }
+
             throw new IdentityProviderException($error, $code, $data);
         }
     }
+
     protected function createResourceOwner(array $response, AccessToken $token)
     {
         return new GoogleUser($response);
     }
 }
+
+
 //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
 $provider = new Google(
     array(
@@ -113,6 +137,7 @@ $provider = new Google(
 	'accessType' => 'offline'
     )
 );
+
 if (!isset($_GET['code'])) {
     // If we don't have an authorization code then get one
     $authUrl = $provider->getAuthorizationUrl();
@@ -131,6 +156,7 @@ if (!isset($_GET['code'])) {
             'code' => $_GET['code']
         )
     );
+
     // Use this to get a new access token if the old one expires
     echo 'Refresh Token: ' . $token->getRefreshToken();
 }
